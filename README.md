@@ -1,36 +1,34 @@
-주요 기능
+# Web Service API Server
 
-JWT 인증/인가 (Access / Refresh Token)
+Node.js + Express 기반의 REST API 서버입니다.  
+JWT 인증을 기반으로 사용자, 게시글, 댓글 기능을 제공합니다.
 
-사용자(User) 관리
+---
 
-게시글(Post) 관리
+## 주요 기능
 
-댓글(Comment) 관리
+- JWT 인증 / 인가 (Access Token, Refresh Token)
+- 사용자(User) 관리
+- 게시글(Post) 관리
+- 댓글(Comment) 관리
+- 게시글 좋아요(PostLike)
+- 공통 에러 응답 규격
+- Swagger(OpenAPI 3.0) 자동 문서화
+- Postman 테스트 컬렉션 제공
 
-게시글 좋아요(PostLike)
+---
 
-공통 에러 응답 규격
+## 기술 스택
 
-Swagger 자동 문서화
+- **Backend**: Node.js, Express.js  
+- **ORM**: Sequelize  
+- **Database**: MySQL 8.0 (Docker)  
+- **Authentication**: JWT (Access / Refresh Token)  
+- **API Docs**: Swagger (OpenAPI 3.0)  
+- **Process Manager**: PM2  
+- **Deployment**: JCloud (Ubuntu)
 
-Postman 테스트 컬렉션 제공
-
-기술 스택
-
-Backend: Node.js, Express.js
-
-ORM: Sequelize
-
-Database: MySQL 8.0 (Docker)
-
-Auth: JWT (Access / Refresh Token)
-
-Docs: Swagger (OpenAPI 3.0)
-
-Process Manager: PM2
-
-Deployment: JCloud (Ubuntu)
+--
 
 배포 정보 (JCloud)
 
@@ -134,5 +132,5 @@ Postman 컬렉션
 Postman Collection(JSON)은 classroom 제공 파일에 포함되어 있습니다.
 환경 변수(baseUrl, accessToken)를 설정하여 테스트합니다.
 
-13. ERD
+ERD
 ![alt text](image.png)
