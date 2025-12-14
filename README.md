@@ -1,20 +1,14 @@
-1. 프로젝트 개요
+주요 기능
 
-본 프로젝트는 다음 기능을 제공하는 REST API 서버입니다.
+JWT 인증/인가 (Access / Refresh Token)
 
-JWT 기반 인증/인가 (USER / ADMIN)
-
-사용자 관리
+사용자(User) 관리
 
 게시글(Post) 관리
 
 댓글(Comment) 관리
 
-Todo 관리
-
-통계 조회 API
-
-페이지네이션 / 정렬 / 검색
+게시글 좋아요(PostLike)
 
 공통 에러 응답 규격
 
@@ -22,13 +16,13 @@ Swagger 자동 문서화
 
 Postman 테스트 컬렉션 제공
 
-2. 기술 스택
+기술 스택
 
 Backend: Node.js, Express.js
 
 ORM: Sequelize
 
-Database: MySQL
+Database: MySQL 8.0 (Docker)
 
 Auth: JWT (Access / Refresh Token)
 
@@ -38,63 +32,78 @@ Process Manager: PM2
 
 Deployment: JCloud (Ubuntu)
 
-3. 배포 정보 (JCloud)
+배포 정보 (JCloud)
 
-Base URL
-http://113.198.66.68:13137
+Base URL: http://113.198.66.68:13137
 
-Health Check
-GET http://113.198.66.68:13137/health
+Health Check: GET http://113.198.66.68:13137/health
 
+Swagger UI: http://113.198.66.68:13137/swagger-ui
 
-
-4. 실행 방법
-4-1. 로컬 실행
+실행 방법
+1) 로컬 실행 (개발)
 npm install
 npm run dev
 
-4-2. 서버 실행 (운영 환경)
+
+기본적으로 .env 설정이 필요합니다. (.env.example 참고)
+
+2) 서버 실행 (운영/배포: PM2)
 npm install
 pm2 start src/app.js --name webservice-hw
 pm2 save
 
-5. 프로세스 관리 (PM2)
-
-본 서버는 PM2로 관리됩니다.
-
-서버 재부팅 이후에도 자동으로 재시작됩니다.
-
+프로세스 관리 (PM2)
 pm2 list
+pm2 restart webservice-hw
 pm2 logs webservice-hw
+pm2 stop webservice-hw
+pm2 delete webservice-hw
 
-6. 환경 변수
-.env.example 참고
+DB (MySQL, Docker)
 
-7. 인증 플로우 (JWT)
+JCloud에서는 MySQL이 Docker 컨테이너로 실행되며, 볼륨을 사용해 데이터가 유지됩니다.
 
-회원가입
+DB 상태 확인
+docker ps
+docker volume ls
+
+환경 변수
+
+.env.example 참고해서 .env를 구성합니다.
+
+
+인증 플로우 (JWT)
+1) 회원가입
+
 POST /auth/register
 
-로그인
+2) 로그인
+
 POST /auth/login
 → Access Token / Refresh Token 발급
 
-인증이 필요한 API 요청 시
+3) 인증 필요한 요청
+
+요청 헤더에 아래 형식으로 포함:
 
 Authorization: Bearer <ACCESS_TOKEN>
 
+4) 토큰 재발급
 
-토큰 재발급
 POST /auth/refresh
 
-로그아웃
+5) 로그아웃
+
 POST /auth/logout
 
-8. 권한(Role) 구성
-Role	설명
-USER	일반 사용자
-ADMIN	관리자
-관리자 전용 API 예시
+권한(Role)
+
+USER: 일반 사용자
+
+ADMIN: 관리자
+
+관리자 전용 API 예시:
 
 GET /users
 
@@ -106,13 +115,11 @@ PATCH /users/{id}/role
 
 GET /stats/*
 
-9. 엔드포인트 요약
-Swagger UI
-http://113.198.66.68:13137/swagger-ui
+엔드포인트
 
-총 엔드포인트 수: 35개
+Swagger UI: http://113.198.66.68:13137/swagger-ui
 
-10. 공통 에러 응답 형식
+공통 에러 응답 형식
 {
   "timestamp": "2025-12-14T12:00:00Z",
   "path": "/posts/1",
@@ -122,14 +129,10 @@ http://113.198.66.68:13137/swagger-ui
   "details": {}
 }
 
-11. Postman 컬렉션
+Postman 컬렉션
 
-Postman Collection(JSON)은 classroom 파일에 포함되어 있습니다.
-환경 변수(baseUrl, accessToken)를 사용하여 테스트합니다.
-
-
-12. DB 정보 
-.env.example 참고
+Postman Collection(JSON)은 classroom 제공 파일에 포함되어 있습니다.
+환경 변수(baseUrl, accessToken)를 설정하여 테스트합니다.
 
 13. ERD
 ![alt text](image.png)
