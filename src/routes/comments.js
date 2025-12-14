@@ -227,4 +227,52 @@ router.delete('/:id', authenticate, async (req, res, next) => {
   }
 });
 
+/**
+ * @openapi
+ * /comments:
+ *   post:
+ *     summary: Create comment
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [postId, content]
+ *             properties:
+ *               postId: { type: integer, example: 1 }
+ *               content: { type: string, example: "nice post" }
+ *     responses:
+ *       201: { description: Created }
+ *       400: { description: Validation failed, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       404: { description: Post not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
+/**
+ * @openapi
+ * /comments/posts/{postId}:
+ *   get:
+ *     summary: List comments by post
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema: { type: integer }
+ *       - in: query
+ *         name: page
+ *         schema: { type: integer, default: 0 }
+ *       - in: query
+ *         name: size
+ *         schema: { type: integer, default: 20 }
+ *     responses:
+ *       200: { description: OK }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
+
 module.exports = router;

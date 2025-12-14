@@ -227,7 +227,93 @@ router.get('/:id', authenticate, async (req, res, next) => {
   }
 });
 
-// PATCH /todos/:id  (+ maintenance 503 테스트: title === "maintenance")
+/**
+ * @openapi
+ * /todos:
+ *   get:
+ *     summary: List todos (pagination/search/sort)
+ *     security: [ { bearerAuth: [] } ]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema: { type: integer, default: 0 }
+ *       - in: query
+ *         name: size
+ *         schema: { type: integer, default: 20 }
+ *       - in: query
+ *         name: keyword
+ *         schema: { type: string, example: "study" }
+ *       - in: query
+ *         name: sort
+ *         schema: { type: string, example: "createdAt,DESC" }
+ *     responses:
+ *       200: { description: OK }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *   post:
+ *     summary: Create todo
+ *     security: [ { bearerAuth: [] } ]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema: { $ref: '#/components/schemas/TodoCreateRequest' }
+ *     responses:
+ *       201: { description: Created }
+ *       400: { description: Validation failed, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
+/**
+ * @openapi
+ * /todos/{id}:
+ *   get:
+ *     summary: Get todo detail
+ *     security: [ { bearerAuth: [] } ]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200: { description: OK }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       404: { description: Not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *   patch:
+ *     summary: Update todo
+ *     security: [ { bearerAuth: [] } ]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title: { type: string, example: "study hard" }
+ *               done: { type: boolean, example: true }
+ *     responses:
+ *       200: { description: OK }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       404: { description: Not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *   delete:
+ *     summary: Delete todo
+ *     security: [ { bearerAuth: [] } ]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       204: { description: No Content }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       404: { description: Not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
+
 router.patch('/:id', authenticate, async (req, res, next) => {
   try {
     const id = Number(req.params.id);

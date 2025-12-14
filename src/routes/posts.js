@@ -68,6 +68,30 @@ const router = express.Router();
  *             schema: { $ref: '#/components/schemas/ErrorResponse' }
  */
 
+/**
+ * @openapi
+ * /posts:
+ *   get:
+ *     summary: List posts (pagination/search/sort)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema: { type: integer, default: 0 }
+ *       - in: query
+ *         name: size
+ *         schema: { type: integer, default: 20 }
+ *       - in: query
+ *         name: sort
+ *         schema: { type: string, example: "createdAt,DESC" }
+ *       - in: query
+ *         name: keyword
+ *         schema: { type: string, example: "hello" }
+ *     responses:
+ *       200: { description: OK }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
 
 router.get('/', authenticate, async (req, res, next) => {
   try {
@@ -119,6 +143,25 @@ router.get('/', authenticate, async (req, res, next) => {
     next(err);
   }
 });
+
+/**
+ * @openapi
+ * /posts:
+ *   post:
+ *     summary: Create post
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema: { $ref: '#/components/schemas/PostCreateRequest' }
+ *     responses:
+ *       201: { description: Created }
+ *       400: { description: Validation failed, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
 
 router.post('/', authenticate, async (req, res, next) => {
   try {
@@ -496,6 +539,36 @@ router.get('/:id/comments', authenticate, async (req, res, next) => {
     next(err);
   }
 });
+
+/**
+ * @openapi
+ * /posts/{id}/like:
+ *   post:
+ *     summary: Like a post
+ *     security: [ { bearerAuth: [] } ]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200: { description: OK }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       404: { description: Not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *   delete:
+ *     summary: Unlike a post
+ *     security: [ { bearerAuth: [] } ]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       204: { description: No Content }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       404: { description: Not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
 
 router.post('/:id/comments', authenticate, async (req, res, next) => {
   try {

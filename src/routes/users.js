@@ -5,6 +5,30 @@ const { authenticate, requireRole } = require('../middlewares/auth');
 
 const router = express.Router();
 
+/**
+ * @openapi
+ * /users:
+ *   post:
+ *     summary: Sign up (create user)
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password, name]
+ *             properties:
+ *               email: { type: string, example: "user1@example.com" }
+ *               password: { type: string, example: "P@ssw0rd!" }
+ *               name: { type: string, example: "홍길동" }
+ *     responses:
+ *       201: { description: Created }
+ *       400: { description: Validation failed, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       409: { description: Duplicate, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
+
 router.post('/', async (req, res, next) => {
   try {
     const { email, password, name } = req.body;
@@ -48,6 +72,20 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+/**
+ * @openapi
+ * /users/me:
+ *   get:
+ *     summary: Get my profile
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200: { description: OK }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       404: { description: User not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
+
 router.get('/me', authenticate, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.user.id);
@@ -72,6 +110,28 @@ router.get('/me', authenticate, async (req, res, next) => {
     next(err);
   }
 });
+
+/**
+ * @openapi
+ * /users/me:
+ *   patch:
+ *     summary: Update my profile
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name: { type: string, example: "변경된이름" }
+ *     responses:
+ *       200: { description: OK }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       404: { description: User not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
 
 router.patch('/me', authenticate, async (req, res, next) => {
   try {
@@ -103,6 +163,20 @@ router.patch('/me', authenticate, async (req, res, next) => {
     next(err);
   }
 });
+
+/**
+ * @openapi
+ * /users/me:
+ *   delete:
+ *     summary: Deactivate my account
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       204: { description: No Content }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       404: { description: User not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
 
 router.delete('/me', authenticate, async (req, res, next) => {
   try {

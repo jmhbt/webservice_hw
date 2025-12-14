@@ -12,6 +12,30 @@ const { Op } = require('sequelize');
 
 const router = express.Router();
 
+/**
+ * @openapi
+ * /auth/register:
+ *   post:
+ *     summary: Register (create user)
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password, name]
+ *             properties:
+ *               email: { type: string, example: "user1@example.com" }
+ *               password: { type: string, example: "P@ssw0rd!" }
+ *               name: { type: string, example: "홍길동" }
+ *     responses:
+ *       201: { description: Created }
+ *       400: { description: Validation failed, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       409: { description: Duplicate, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
+
 router.post('/register', async (req, res, next) => {
   try {
     const { email, password, name } = req.body;
@@ -161,6 +185,28 @@ router.post('/login', async (req, res, next) => {
   }
 });
 
+/**
+ * @openapi
+ * /auth/refresh:
+ *   post:
+ *     summary: Refresh access token
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [refreshToken]
+ *             properties:
+ *               refreshToken: { type: string }
+ *     responses:
+ *       200: { description: OK }
+ *       400: { description: Validation failed, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       401: { description: Token expired/invalid, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
+
 router.post('/refresh', async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
@@ -217,6 +263,27 @@ router.post('/refresh', async (req, res, next) => {
   }
 });
 
+/**
+ * @openapi
+ * /auth/logout:
+ *   post:
+ *     summary: Logout (revoke refresh token)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken: { type: string, nullable: true }
+ *     responses:
+ *       204: { description: No Content }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
+
 router.post('/logout', authenticate, async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
@@ -238,6 +305,31 @@ router.post('/logout', authenticate, async (req, res, next) => {
     next(err);
   }
 });
+
+/**
+ * @openapi
+ * /auth/change-password:
+ *   post:
+ *     summary: Change password (revoke all refresh tokens)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [currentPassword, newPassword]
+ *             properties:
+ *               currentPassword: { type: string, example: "P@ssw0rd!" }
+ *               newPassword: { type: string, example: "NewP@ssw0rd!" }
+ *     responses:
+ *       200: { description: OK }
+ *       400: { description: Validation failed, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       404: { description: User not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
 
 router.post('/change-password', authenticate, async (req, res, next) => {
   try {

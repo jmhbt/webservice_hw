@@ -6,7 +6,30 @@ const { QueryTypes } = require('sequelize');
 
 const router = express.Router();
 
-// 오늘 포함 최근 7일치 게시글 생성 수
+/**
+ * @openapi
+ * /stats/daily:
+ *   get:
+ *     summary: Daily stats (ADMIN)
+ *     security: [ { bearerAuth: [] } ]
+ *     responses:
+ *       200: { description: OK }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       403: { description: Forbidden, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
+/**
+ * @openapi
+ * /stats/top-authors:
+ *   get:
+ *     summary: Top authors stats (ADMIN)
+ *     security: [ { bearerAuth: [] } ]
+ *     responses:
+ *       200: { description: OK }
+ *       401: { description: Unauthorized, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ *       403: { description: Forbidden, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+ */
+
 router.get('/posts/daily', authenticate, requireRole('ADMIN'), async (req, res, next) => {
   try {
     const rows = await sequelize.query(
