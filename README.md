@@ -118,6 +118,7 @@ GET /stats/*
 Swagger UI: http://113.198.66.68:13137/swagger-ui
 
 ## 공통 에러 응답 형식
+```json
 {
   "timestamp": "2025-12-14T12:00:00Z",
   "path": "/posts/1",
@@ -126,6 +127,7 @@ Swagger UI: http://113.198.66.68:13137/swagger-ui
   "message": "Resource not found",
   "details": {}
 }
+```
 
 ## Postman 컬렉션
 
