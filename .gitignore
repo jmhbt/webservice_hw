@@ -1,0 +1,12 @@
+# environment variables
+.env
+.env.test
+
+# ssh / keys
+*.pem
+*.ppk
+id_rsa
+id_rsa.pub
+
+# node modules
+node_modules/
