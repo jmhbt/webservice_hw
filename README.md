@@ -1,8 +1,3 @@
-Webservice HW API Server
-
-DB·API 설계를 기반으로 한 실전 API 서버 구현 과제입니다.
-Express.js + MySQL 기반으로 구현되었으며, JCloud 환경에 배포되어 있습니다.
-
 1. 프로젝트 개요
 
 본 프로젝트는 다음 기능을 제공하는 REST API 서버입니다.
@@ -73,21 +68,7 @@ pm2 list
 pm2 logs webservice-hw
 
 6. 환경 변수
-
-민감 정보는 .env 파일로 관리되며 GitHub에는 포함되지 않습니다.
-아래는 .env.example 기준 항목입니다.
-
-DB_HOST=
-DB_PORT=
-DB_NAME=
-DB_USER=
-DB_PASSWORD=
-
-JWT_ACCESS_SECRET=
-JWT_REFRESH_SECRET=
-
-PORT=3000
-NODE_ENV=development
+.env.example 참고
 
 7. 인증 플로우 (JWT)
 
@@ -147,17 +128,8 @@ Postman Collection(JSON)은 classroom 파일에 포함되어 있습니다.
 환경 변수(baseUrl, accessToken)를 사용하여 테스트합니다.
 
 
-12. DB 정보 (테스트용)
-
-※ 실제 ID/비밀번호는 Classroom 제출 파일로만 제공
-
-DB: MySQL
-
-Host: localhost
-
-Port: 3306
-
-Database: webservice_hw
+12. DB 정보 
+.env.example 참고
 
 13. ERD
 ![alt text](image.png)
